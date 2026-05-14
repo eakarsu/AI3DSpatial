@@ -6,6 +6,7 @@ export const FEATURES = [
     icon: '\u2B21',
     color: '#6366f1',
     endpoint: '/api/models3d',
+    table: 'models3d',
     aiEndpoint: '/api/ai/generate-3d-model',
     aiPromptHint: 'Describe the 3D model you want to generate (e.g., "A detailed steampunk airship with brass propellers")',
     columns: [
@@ -33,6 +34,7 @@ export const FEATURES = [
     icon: '\u{1F4F1}',
     color: '#8b5cf6',
     endpoint: '/api/ar-scenes',
+    table: 'ar_scenes',
     aiEndpoint: '/api/ai/generate-ar-scene',
     aiPromptHint: 'Describe the AR scene you want to create (e.g., "An AR furniture placement app for a living room")',
     columns: [
@@ -60,6 +62,7 @@ export const FEATURES = [
     icon: '\u{1F3AE}',
     color: '#a855f7',
     endpoint: '/api/vr-environments',
+    table: 'vr_environments',
     aiEndpoint: '/api/ai/generate-vr-environment',
     aiPromptHint: 'Describe the VR environment (e.g., "A serene Japanese zen garden for meditation VR")',
     columns: [
@@ -88,6 +91,7 @@ export const FEATURES = [
     icon: '\u{1F3A8}',
     color: '#ec4899',
     endpoint: '/api/textures',
+    table: 'textures',
     aiEndpoint: '/api/ai/generate-texture',
     aiPromptHint: 'Describe the texture (e.g., "Weathered copper with green patina, PBR metallic workflow")',
     columns: [
@@ -116,6 +120,7 @@ export const FEATURES = [
     icon: '\u{1F3AC}',
     color: '#f59e0b',
     endpoint: '/api/animations',
+    table: 'animations',
     aiEndpoint: '/api/ai/generate-animation',
     aiPromptHint: 'Describe the animation (e.g., "A smooth walk cycle for a bipedal robot character")',
     columns: [
@@ -144,6 +149,7 @@ export const FEATURES = [
     icon: '\u2601',
     color: '#14b8a6',
     endpoint: '/api/point-clouds',
+    table: 'point_clouds',
     aiEndpoint: '/api/ai/analyze-point-cloud',
     aiPromptHint: 'Describe the point cloud analysis (e.g., "Analyze a LiDAR scan of a bridge for structural defects")',
     columns: [
@@ -172,6 +178,7 @@ export const FEATURES = [
     icon: '\u25B3',
     color: '#06b6d4',
     endpoint: '/api/mesh-optimization',
+    table: 'mesh_optimization',
     aiEndpoint: '/api/ai/optimize-mesh',
     aiPromptHint: 'Describe the mesh optimization task (e.g., "Optimize a 500K poly character model for mobile VR")',
     columns: [
@@ -200,6 +207,7 @@ export const FEATURES = [
     icon: '\u{1F5FA}',
     color: '#10b981',
     endpoint: '/api/spatial-mapping',
+    table: 'spatial_mapping',
     aiEndpoint: '/api/ai/generate-spatial-map',
     aiPromptHint: 'Describe the spatial mapping task (e.g., "Map a retail store for AR product placement")',
     columns: [
@@ -228,6 +236,7 @@ export const FEATURES = [
     icon: '\u{1F50D}',
     color: '#ef4444',
     endpoint: '/api/object-detection',
+    table: 'object_detection',
     aiEndpoint: '/api/ai/detect-objects',
     aiPromptHint: 'Describe the object detection task (e.g., "Detect vehicles in a parking lot LiDAR scan")',
     columns: [
@@ -256,6 +265,7 @@ export const FEATURES = [
     icon: '\u{1F3D7}',
     color: '#f97316',
     endpoint: '/api/scene-reconstruction',
+    table: 'scene_reconstruction',
     aiEndpoint: '/api/ai/reconstruct-scene',
     aiPromptHint: 'Describe the scene reconstruction (e.g., "Reconstruct a historic building from 200 drone photos")',
     columns: [
@@ -284,6 +294,7 @@ export const FEATURES = [
     icon: '\u2728',
     color: '#d946ef',
     endpoint: '/api/materials',
+    table: 'materials',
     aiEndpoint: '/api/ai/generate-material',
     aiPromptHint: 'Describe the material (e.g., "Iridescent beetle shell material with subsurface scattering")',
     columns: [
@@ -312,6 +323,7 @@ export const FEATURES = [
     icon: '\u{1F4E6}',
     color: '#0ea5e9',
     endpoint: '/api/asset-library',
+    table: 'asset_library',
     aiEndpoint: '/api/ai/generate-asset',
     aiPromptHint: 'Describe the 3D asset (e.g., "A low-poly stylized campfire with animated flames")',
     columns: [
@@ -341,6 +353,7 @@ export const FEATURES = [
     icon: '\u{1F48E}',
     color: '#c084fc',
     endpoint: '/api/holographic',
+    table: 'holographic',
     aiEndpoint: '/api/ai/generate-hologram',
     aiPromptHint: 'Describe the holographic content (e.g., "An interactive holographic anatomy display for medical education")',
     columns: [
@@ -369,6 +382,7 @@ export const FEATURES = [
     icon: '\u{1F3B5}',
     color: '#22d3ee',
     endpoint: '/api/spatial-audio',
+    table: 'spatial_audio',
     aiEndpoint: '/api/ai/generate-spatial-audio',
     aiPromptHint: 'Describe the spatial audio (e.g., "A rain forest ambience with positioned bird calls and stream")',
     columns: [
@@ -398,6 +412,7 @@ export const FEATURES = [
     icon: '\u{1F3AD}',
     color: '#f43f5e',
     endpoint: '/api/scene-generator',
+    table: 'scene_generator',
     aiEndpoint: '/api/ai/generate-scene',
     aiPromptHint: 'Describe the 3D scene you want to generate (e.g., "A cozy coffee shop interior at sunset with warm lighting, wooden tables, potted plants, and a barista behind the counter")',
     columns: [
@@ -433,6 +448,7 @@ export const FEATURES = [
     icon: '\u{1F504}',
     color: '#84cc16',
     endpoint: '/api/digital-twins',
+    table: 'digital_twins',
     aiEndpoint: '/api/ai/generate-digital-twin',
     aiPromptHint: 'Describe the digital twin (e.g., "A smart building twin with HVAC and energy monitoring")',
     columns: [

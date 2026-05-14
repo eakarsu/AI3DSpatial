@@ -15,14 +15,14 @@ async function seed() {
   console.log('✅ Schema created');
 
   // Clear existing data
-  const tables = ['users', 'models3d', 'ar_scenes', 'vr_environments', 'textures', 'animations',
+  const tables = ['ai_results', 'asset_links', 'users', 'models3d', 'ar_scenes', 'vr_environments', 'textures', 'animations',
     'point_clouds', 'mesh_optimization', 'spatial_mapping', 'object_detection',
     'scene_reconstruction', 'materials', 'asset_library', 'holographic', 'spatial_audio', 'digital_twins', 'scene_generator'];
   for (const t of tables) {
     await pool.query(`DELETE FROM ${t}`);
-    await pool.query(`ALTER SEQUENCE ${t}_id_seq RESTART WITH 1`);
+    try { await pool.query(`ALTER SEQUENCE ${t}_id_seq RESTART WITH 1`); } catch (e) {}
   }
-  console.log('✅ Tables cleared');
+  console.log('Tables cleared');
 
   // Seed users
   const hashedPassword = await bcrypt.hash('password123', 10);

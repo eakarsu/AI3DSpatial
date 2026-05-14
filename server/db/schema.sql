@@ -301,3 +301,33 @@ CREATE TABLE IF NOT EXISTS digital_twins (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- AI Results — central audit log for all AI calls
+CREATE TABLE IF NOT EXISTS ai_results (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    feature VARCHAR(100) NOT NULL,
+    endpoint VARCHAR(200) NOT NULL,
+    prompt TEXT NOT NULL,
+    ai_response TEXT,
+    parsed_json JSONB,
+    model VARCHAR(100),
+    prompt_tokens INTEGER,
+    completion_tokens INTEGER,
+    total_tokens INTEGER,
+    source_table VARCHAR(100),
+    source_id INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Asset Links — cross-feature relational linking
+CREATE TABLE IF NOT EXISTS asset_links (
+    id SERIAL PRIMARY KEY,
+    source_type VARCHAR(100) NOT NULL,
+    source_id INTEGER NOT NULL,
+    target_type VARCHAR(100) NOT NULL,
+    target_id INTEGER NOT NULL,
+    relationship VARCHAR(100) DEFAULT 'uses',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(source_type, source_id, target_type, target_id)
+);

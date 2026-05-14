@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import FeaturePage from './pages/FeaturePage';
+import AdvisorPage from './pages/AdvisorPage';
 import './App.css';
 
 const API = 'http://localhost:3001/api';
@@ -42,6 +43,7 @@ function App() {
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
         <Route path="/" element={user ? <Dashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/feature/:featureKey" element={user ? <FeaturePage user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/advisors" element={user ? <AdvisorPage user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
