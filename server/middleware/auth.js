@@ -14,4 +14,6 @@ const authenticate = (req, res, next) => {
   }
 };
 
-module.exports = { authenticate };
+// Support both `const { authenticate } = require(...)` and `const auth = require(...)`
+module.exports = authenticate;
+module.exports.authenticate = authenticate;

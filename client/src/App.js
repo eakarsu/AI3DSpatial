@@ -4,7 +4,13 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import FeaturePage from './pages/FeaturePage';
 import AdvisorPage from './pages/AdvisorPage';
+import GapAiImageBasedObjectDetection from './pages/GapAiImageBasedObjectDetection';
 import './App.css';
+
+import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
+import CodexOperationsFeature from './pages/CodexOperationsFeature';
+
+import TimelineView from './pages/TimelineView';
 
 const API = 'http://localhost:3001/api';
 
@@ -40,10 +46,15 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/insights/timeline" element={<TimelineView />} />
+        <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
+        <Route path="/codex/operations" element={<CodexOperationsFeature />} />
+
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
         <Route path="/" element={user ? <Dashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/feature/:featureKey" element={user ? <FeaturePage user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/advisors" element={user ? <AdvisorPage user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/gap/ai-image-object-detection" element={user ? <GapAiImageBasedObjectDetection /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );

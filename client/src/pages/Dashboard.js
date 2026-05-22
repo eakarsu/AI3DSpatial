@@ -54,6 +54,12 @@ export default function Dashboard({ user, onLogout }) {
             AI Advisors
           </button>
           <button
+            onClick={() => navigate('/gap/ai-image-object-detection')}
+            style={{ padding: '6px 14px', borderRadius: 6, background: 'rgba(14,165,233,0.18)', border: '1px solid rgba(14,165,233,0.35)', color: '#7dd3fc', fontSize: 13, cursor: 'pointer', marginRight: 8 }}
+          >
+            Object Detection
+          </button>
+          <button
             onClick={() => setShowUsage(!showUsage)}
             style={{ padding: '6px 14px', borderRadius: 6, background: 'rgba(99,102,241,0.2)', border: '1px solid rgba(99,102,241,0.3)', color: '#a5b4fc', fontSize: 13, cursor: 'pointer', marginRight: 8 }}
           >
