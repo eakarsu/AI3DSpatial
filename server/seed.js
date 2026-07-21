@@ -3,6 +3,10 @@ const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
+const demoPassword = process.env.DEMO_PASSWORD;
+if (process.env.CONFIRM_DEMO_SEED !== 'YES' || process.env.NODE_ENV === 'production' || !demoPassword || demoPassword.length < 12) {
+  throw new Error('Demo seed requires CONFIRM_DEMO_SEED=YES, non-production NODE_ENV, and DEMO_PASSWORD of at least 12 characters');
+}
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
@@ -25,7 +29,7 @@ async function seed() {
   console.log('Tables cleared');
 
   // Seed users
-  const hashedPassword = await bcrypt.hash('password123', 10);
+  const hashedPassword = await bcrypt.hash(demoPassword, 10);
   await pool.query(`INSERT INTO users (email, password, name) VALUES
     ('admin@ai3dspatial.com', $1, 'Admin User'),
     ('demo@ai3dspatial.com', $1, 'Demo User')`, [hashedPassword]);

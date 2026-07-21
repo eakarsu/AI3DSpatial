@@ -4,7 +4,6 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import FeaturePage from './pages/FeaturePage';
 import AdvisorPage from './pages/AdvisorPage';
-import GapAiImageBasedObjectDetection from './pages/GapAiImageBasedObjectDetection';
 import './App.css';
 
 import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
@@ -54,7 +53,6 @@ function App() {
         <Route path="/" element={user ? <Dashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/feature/:featureKey" element={user ? <FeaturePage user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/advisors" element={user ? <AdvisorPage user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
-        <Route path="/gap/ai-image-object-detection" element={user ? <GapAiImageBasedObjectDetection /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );

@@ -108,7 +108,7 @@ export default function FeaturePage({ user, onLogout }) {
 
   useEffect(() => {
     loadItems(1);
-  }, [feature, search, statusFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loadItems]);
 
   if (!feature) {
     return <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>Feature not found</div>;

@@ -1,4 +1,5 @@
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
+const { legacyPrototypeRoutesEnabled } = require('./config/runtime').validateRuntime();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -24,6 +25,12 @@ app.use(express.json({ limit: '50mb' }));
 // Apply general rate limiter to all routes
 app.use(generalLimiter);
 
+app.use('/api', (req, res, next) => {
+  const supported = ['/auth', '/health', '/asset-conversion-workflows'];
+  if (legacyPrototypeRoutesEnabled || supported.some((prefix) => req.path === prefix || req.path.startsWith(`${prefix}/`))) return next();
+  return res.status(410).json({ error: 'Legacy prototype route is quarantined', code: 'prototype_route_quarantined' });
+});
+
 // Make pool available to routes
 app.locals.pool = pool;
 
@@ -47,6 +54,7 @@ app.use('/api/digital-twins', require('./routes/digitalTwins')(pool));
 app.use('/api/scene-generator', require('./routes/sceneGenerator')(pool));
 app.use('/api/ai', require('./routes/ai')(pool));
 app.use('/api/links', require('./routes/links')(pool));
+app.use('/api/asset-conversion-workflows', require('./routes/assetConversionWorkflow')(pool));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -57,23 +65,4 @@ app.listen(PORT, () => {
   console.log(`AI 3D/Spatial Backend running on port ${PORT}`);
 });
 
-// BATCH_00_AUDIT_MOUNTS
-app.use('/api/text-to-scene', require('./routes/textToScene'));
-app.use('/api/photogrammetry', require('./routes/photogrammetry'));
-app.use('/api/material-synthesis', require('./routes/materialSynthesis'));
-app.use('/api/multiplayer-sync', require('./routes/multiplayerSync'));
-app.use('/api/neural-compression', require('./routes/neuralCompression'));
-
-// === Batch 00 Gaps & Frontend Mounts ===
-app.use('/api/gap-ai-neural-mesh-compression', require('./routes/gap_ai_neural_mesh_compression'));
-app.use('/api/gap-ai-text-scene-generation', require('./routes/gap_ai_text_scene_generation'));
-app.use('/api/gap-ai-image-based-object-detection', require('./routes/gap_ai_image_based_object_detection'));
-app.use('/api/gap-ai-spatial-mapping-live-camera', require('./routes/gap_ai_spatial_mapping_live_camera'));
-app.use('/api/gap-ai-scene-reconstruction-nerf-gaussian', require('./routes/gap_ai_scene_reconstruction_nerf_gaussian'));
-app.use('/api/gap-ai-material-recommendation-use-case', require('./routes/gap_ai_material_recommendation_use_case'));
-app.use('/api/gap-multi-user-real-time-collaborative', require('./routes/gap_multi_user_real_time_collaborative'));
-app.use('/api/gap-physics-simulation-collision-gravity', require('./routes/gap_physics_simulation_collision_gravity'));
-app.use('/api/gap-global-illumination-lighting-simulation', require('./routes/gap_global_illumination_lighting_simulation'));
-app.use('/api/gap-fps-performance-profiling-tools', require('./routes/gap_fps_performance_profiling_tools'));
-app.use('/api/gap-notifications-subsystem', require('./routes/gap_notifications_subsystem'));
-app.use('/api/gap-outbound-webhooks', require('./routes/gap_outbound_webhooks'));
+// Batch-generated stub and gap routes are intentionally not mounted as product APIs.

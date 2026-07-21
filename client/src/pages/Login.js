@@ -28,11 +28,6 @@ export default function Login({ onLogin }) {
     }
   };
 
-  const autoFill = () => {
-    setEmail('admin@ai3dspatial.com');
-    setPassword('password123');
-  };
-
   return (
     <div className="login-container">
       <div className="login-card">
@@ -70,9 +65,6 @@ export default function Login({ onLogin }) {
           </button>
         </form>
 
-        <button onClick={autoFill} className="btn-autofill">
-          Quick Fill Demo Credentials
-        </button>
       </div>
     </div>
   );
