@@ -11,7 +11,7 @@ import CodexOperationsFeature from './pages/CodexOperationsFeature';
 
 import TimelineView from './pages/TimelineView';
 
-const API = 'http://localhost:3001/api';
+const API = process.env.REACT_APP_API_URL || '/api';
 
 function App() {
   const [user, setUser] = useState(null);

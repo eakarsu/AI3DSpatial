@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FEATURES } from '../config/features';
 
-const API = 'http://localhost:3001/api';
-const AI_API = 'http://localhost:3001/api/ai';
+const API = process.env.REACT_APP_API_URL || '/api';
+const AI_API = `${API}/ai`;
 
 function getToken() {
   return localStorage.getItem('token');

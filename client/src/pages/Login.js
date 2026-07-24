@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const API = 'http://localhost:3001/api';
+const API = process.env.REACT_APP_API_URL || '/api';
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');
