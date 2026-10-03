@@ -10,6 +10,7 @@ import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
 import CodexOperationsFeature from './pages/CodexOperationsFeature';
 
 import TimelineView from './pages/TimelineView';
+import AppSidebar from './components/AppSidebar';
 
 const API = process.env.REACT_APP_API_URL || '/api';
 
@@ -44,6 +45,8 @@ function App() {
 
   return (
     <Router>
+      <div className={user ? 'codex-nav-shell' : undefined}>
+      {user && <AppSidebar />}
       <Routes>
         <Route path="/insights/timeline" element={<TimelineView />} />
         <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
@@ -54,6 +57,7 @@ function App() {
         <Route path="/feature/:featureKey" element={user ? <FeaturePage user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/advisors" element={user ? <AdvisorPage user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
       </Routes>
+      </div>
     </Router>
   );
 }
