@@ -81,7 +81,7 @@ module.exports = (pool) => {
   // GET /api/auth/me — uses authenticate middleware
   router.get('/me', authenticate, async (req, res) => {
     try {
-      const result = await pool.query('SELECT id, email, name, created_at FROM users WHERE id = $1', [req.user.id]);
+      const result = await pool.query('SELECT id, email, name, role, tenant_id, created_at FROM users WHERE id = $1', [req.user.id]);
       if (result.rows.length === 0) return res.status(404).json({ error: 'User not found' });
       res.json({ user: result.rows[0] });
     } catch (err) {

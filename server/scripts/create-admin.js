@@ -14,11 +14,10 @@ async function main() {
     await pool.query(
       `INSERT INTO users (email, password, name, role, tenant_id)
        VALUES ($1, $2, $3, 'admin', $4)
-       ON CONFLICT (email) DO UPDATE SET password=EXCLUDED.password, name=EXCLUDED.name,
-         role=EXCLUDED.role, tenant_id=EXCLUDED.tenant_id`,
+       ON CONFLICT (email) DO NOTHING`,
       [email, await bcrypt.hash(password, 12), 'Runtime Administrator', tenantId],
     );
-    console.log('Administrator provisioned.');
+    console.log('Administrator provisioning checked; existing accounts preserved.');
   } finally {
     await pool.end();
   }

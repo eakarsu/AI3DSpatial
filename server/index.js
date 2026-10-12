@@ -10,9 +10,10 @@ const app = express();
 const PORT = process.env.BACKEND_PORT || 3001;
 
 // Database pool
-const pool = new Pool({
+const nativeExecution=require('./lib/nativeExecution');
+const pool = nativeExecution.wrapPool(new Pool({
   connectionString: process.env.DATABASE_URL,
-});
+}));
 
 // Security middleware
 app.use(helmet());
@@ -26,10 +27,14 @@ app.use(express.json({ limit: '50mb' }));
 app.use(generalLimiter);
 
 app.use('/api', (req, res, next) => {
-  const supported = ['/auth', '/health', '/asset-conversion-workflows', '/runtime-ai'];
+  const supported = ['/auth', '/health', '/asset-conversion-workflows', '/runtime-ai', '/report-workspace'];
   if (legacyPrototypeRoutesEnabled || supported.some((prefix) => req.path === prefix || req.path.startsWith(`${prefix}/`))) return next();
   return res.status(410).json({ error: 'Legacy prototype route is quarantined', code: 'prototype_route_quarantined' });
 });
+
+// Preserve native security/quarantine; provider writes share one cancellable transaction.
+const ownExecution=nativeExecution.createExecutionMiddleware({pool});
+app.use((req,res,next)=>(req.method==='POST'&&['/api/runtime-ai/scene-readiness','/api/report-workspace/run'].includes(req.path))||(req.method==='DELETE'&&/^\/api\/report-workspace\/runs\/[^/]+$/.test(req.path))?ownExecution(req,res,next):next());
 
 // Make pool available to routes
 app.locals.pool = pool;
@@ -55,6 +60,7 @@ app.use('/api/digital-twins', require('./routes/digitalTwins')(pool));
 app.use('/api/scene-generator', require('./routes/sceneGenerator')(pool));
 app.use('/api/ai', require('./routes/ai')(pool));
 app.use('/api/links', require('./routes/links')(pool));
+app.use((req,res,next)=>{if((req.method==='POST'&&req.path==='/api/asset-conversion-workflows/drafts')||(['PUT','DELETE'].includes(req.method)&&/^\/api\/asset-conversion-workflows\/\d+\/draft$/.test(req.path)))return require('./lib/nativeExecution').createExecutionMiddleware({pool})(req,res,next);next();});
 app.use('/api/asset-conversion-workflows', require('./routes/assetConversionWorkflow')(pool));
 
 // Health check
@@ -62,6 +68,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+
+// Advisory AI reports only; native execution and approval routes stay unchanged.
+const aiWorkspaceSupport = require("./aiWorkspaceAdapters.cjs");
+const aiWorkspaceDatabase = pool;
+app.use('/api/report-workspace', require("./aiWorkspace.cjs").createAIWorkspaceRouter({
+  pool: aiWorkspaceDatabase, authenticateToken: require("./middleware/auth.js").authenticate,
+  aiRateLimiter: aiWorkspaceSupport.createWorkspaceLimiter(), features: require("./aiWorkspaceFeatures.json"),
+}));
 app.listen(PORT, () => {
   console.log(`AI 3D/Spatial Backend running on port ${PORT}`);
 });

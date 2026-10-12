@@ -1,3 +1,4 @@
+import NativeAIControls from "../components/NativeAIControls.jsx";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -154,17 +155,18 @@ export default function AdvisorPage({ user, onLogout }) {
         <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, padding: 24 }}>
           <h3 style={{ color: advisor.color, marginBottom: 16 }}>{advisor.title}</h3>
           <form onSubmit={submit} style={{ display: 'grid', gap: 12 }}>
+<NativeAIControls busy={loading} context="3DSpatial">
             {advisor.fields.map(f => (
               <div key={f.key}>
                 <label style={{ display: 'block', fontSize: 12, color: '#9090b0', marginBottom: 4 }}>
                   {f.label}{f.required ? ' *' : ''}
                 </label>
                 {f.type === 'textarea' ? (
-                  <textarea value={formData[f.key] || ''} onChange={(e) => setFormData({ ...formData, [f.key]: e.target.value })}
+                  <textarea data-ai-field={f.key} value={formData[f.key] ?? ''} onChange={(e) => setFormData({ ...formData, [f.key]: e.target.value })}
                     placeholder={f.placeholder} required={f.required} rows={3}
                     style={{ width: '100%', background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, padding: 8, color: '#e0e0f0', fontFamily: 'inherit' }} />
                 ) : (
-                  <input type={f.type || 'text'} value={formData[f.key] || ''} onChange={(e) => setFormData({ ...formData, [f.key]: e.target.value })}
+                  <input data-ai-field={f.key} type={f.type || 'text'} value={formData[f.key] ?? ''} onChange={(e) => setFormData({ ...formData, [f.key]: e.target.value })}
                     placeholder={f.placeholder} required={f.required}
                     style={{ width: '100%', background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, padding: 8, color: '#e0e0f0' }} />
                 )}
@@ -174,7 +176,8 @@ export default function AdvisorPage({ user, onLogout }) {
               style={{ background: advisor.color, color: '#0a0a14', border: 'none', borderRadius: 6, padding: '10px 16px', fontWeight: 600, cursor: loading ? 'wait' : 'pointer', alignSelf: 'flex-start' }}>
               {loading ? 'Generating...' : 'Generate plan'}
             </button>
-          </form>
+          </NativeAIControls>
+</form>
 
           {error && <div style={{ marginTop: 16, padding: 12, background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: 6, color: '#fca5a5' }}>{error}</div>}
           {result && (

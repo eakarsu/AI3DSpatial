@@ -83,7 +83,7 @@ set -a; source .env; set +a; : "${BACKEND_PORT:=3001}" "${FRONTEND_PORT:=3000}"
 : "${OPENROUTER_BASE_URL:?OPENROUTER_BASE_URL is required}"
 [ "$OPENROUTER_BASE_URL" = "https://openrouter.ai/api/v1" ] || { echo 'OPENROUTER_BASE_URL must be https://openrouter.ai/api/v1' >&2; exit 1; }
 test -d node_modules && test -d client/node_modules || { echo 'Dependencies absent; run scripts/bootstrap.sh.' >&2; exit 1; }
-for port in "$BACKEND_PORT" "$FRONTEND_PORT"; do if lsof -ti ":$port" >/dev/null 2>&1; then echo "Port $port is occupied; refusing to terminate another process." >&2; exit 1; fi; done
+for port in "$BACKEND_PORT" "$FRONTEND_PORT"; do if lsof -nP -tiTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then echo "Port $port is occupied; refusing to terminate another process." >&2; exit 1; fi; done
 if [ "${MIGRATE_ON_START:-false}" = true ]; then
   case "${ALLOW_SCHEMA_MIGRATION:-}" in 1|true) ;; *) echo 'ALLOW_SCHEMA_MIGRATION=1 or true is required for startup migration.' >&2; exit 1;; esac
   ./scripts/migrate.sh

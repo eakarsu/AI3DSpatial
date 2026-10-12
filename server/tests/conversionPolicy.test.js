@@ -20,6 +20,7 @@ test('rejects oversized and unprovenanced assets', () => {
 test('runtime rejects missing secrets', () => assert.throws(() => validateRuntime({ DATABASE_URL: 'postgres://db' }), /JWT_SECRET/));
 test('runtime quarantines legacy routes and forbids production opt-in', () => {
   assert.equal(validateRuntime({ DATABASE_URL: 'postgres://db', JWT_SECRET: 'x'.repeat(32) }).legacyPrototypeRoutesEnabled, false);
+  assert.equal(validateRuntime({ NODE_ENV: 'development', DATABASE_URL: 'postgres://db', JWT_SECRET: 'x'.repeat(32), ENABLE_LEGACY_PROTOTYPE_ROUTES: 'true' }).legacyPrototypeRoutesEnabled, false);
   assert.throws(() => validateRuntime({ NODE_ENV: 'production', DATABASE_URL: 'postgres://db', CLIENT_URL: 'https://app.example', JWT_SECRET: 'x'.repeat(32), ENABLE_LEGACY_PROTOTYPE_ROUTES: 'true' }), /cannot be enabled/);
 });
 test('requires reference fidelity evidence from the renderer', () => {

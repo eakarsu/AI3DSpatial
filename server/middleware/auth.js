@@ -1,19 +1,3 @@
-const jwt = require('jsonwebtoken');
-
-const authenticate = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-  if (!token) {
-    return res.status(401).json({ error: 'Access denied. No token provided.' });
-  }
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    res.status(401).json({ error: 'Invalid token.' });
-  }
-};
-
-// Support both `const { authenticate } = require(...)` and `const auth = require(...)`
-module.exports = authenticate;
-module.exports.authenticate = authenticate;
+const jwt=require('jsonwebtoken');
+const authenticate=(req,res,next)=>{const token=String(req.headers.authorization||'').replace(/^Bearer\s+/i,'');if(!token)return res.status(401).json({error:'Bearer access token required'});let claims;try{claims=jwt.verify(token,process.env.JWT_SECRET,{algorithms:['HS256']});}catch(_){return res.status(401).json({error:'Invalid or expired token'});}req.app.locals.pool.query('SELECT id,email,role,tenant_id FROM users WHERE id=$1',[claims.id]).then(result=>{const user=result.rows[0];if(!user||user.email!==claims.email||user.role!==claims.role||user.tenant_id!==claims.tenantId)return res.status(401).json({error:'Your account identity has changed. Sign in again.'});req.user=claims;next();}).catch(()=>res.status(503).json({error:'Your native account could not be loaded. Retry.'}));};
+module.exports=authenticate;module.exports.authenticate=authenticate;
