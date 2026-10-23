@@ -396,7 +396,7 @@ export default function FeaturePage({ user, onLogout }) {
       {/* Detail Modal */}
       {selectedItem && (
         <div className="modal-overlay" onClick={() => { setSelectedItem(null); setToolResult(null); }}>
-          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 760 }}>
+          <div className="modal" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()} style={{ maxWidth: 760 }}>
             <div className="modal-header">
               <h2>{selectedItem.name}</h2>
               <button className="modal-close" onClick={() => { setSelectedItem(null); setToolResult(null); }}>&#x2715;</button>
@@ -499,6 +499,7 @@ export default function FeaturePage({ user, onLogout }) {
             <div className="modal-actions">
               <button className="btn-edit" onClick={() => handleEdit(selectedItem)}>&#x270F; Edit</button>
               <button className="btn-delete" onClick={() => handleDelete(selectedItem.id)}>🗑 Delete</button>
+              <button className="btn-cancel" onClick={() => { setSelectedItem(null); setToolResult(null); }}>Cancel</button>
             </div>
           </div>
         </div>

@@ -27,7 +27,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(generalLimiter);
 
 app.use('/api', (req, res, next) => {
-  const supported = ['/auth', '/health', '/asset-conversion-workflows', '/runtime-ai', '/report-workspace'];
+  const supported = ['/tasks', '/auth', '/health', '/asset-conversion-workflows', '/runtime-ai', '/report-workspace'];
   if (legacyPrototypeRoutesEnabled || supported.some((prefix) => req.path === prefix || req.path.startsWith(`${prefix}/`))) return next();
   return res.status(410).json({ error: 'Legacy prototype route is quarantined', code: 'prototype_route_quarantined' });
 });
@@ -43,6 +43,7 @@ app.locals.pool = pool;
 app.use('/api/auth', authLimiter, require('./routes/auth')(pool));
 app.use('/api/runtime-ai', require('./routes/runtimeAi')(pool));
 app.use('/api/models3d', require('./routes/models3d')(pool));
+app.use('/api/tasks', require('./routes/tasks')(pool));
 app.use('/api/ar-scenes', require('./routes/arScenes')(pool));
 app.use('/api/vr-environments', require('./routes/vrEnvironments')(pool));
 app.use('/api/textures', require('./routes/textures')(pool));

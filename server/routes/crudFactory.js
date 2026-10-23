@@ -58,6 +58,22 @@ module.exports = function createCrudRouter(pool, tableName, columns) {
     }
   });
 
+  // GET /export?format=csv|json - export filtered records
+  router.get('/export', async (req, res) => {
+    try {
+      const search = req.query.search ? `%${req.query.search}%` : null;
+      const statusFilter = req.query.status || null;
+      let where = []; let params = []; let idx = 1;
+      if (search) { where.push(`(name ILIKE $${idx} OR description ILIKE $${idx})`); params.push(search); idx++; }
+      if (statusFilter) { where.push(`status = $${idx}`); params.push(statusFilter); idx++; }
+      const whereClause = where.length ? `WHERE ${where.join(' AND ')}` : '';
+      const result = await pool.query(`SELECT * FROM ${tableName} ${whereClause} ORDER BY created_at DESC LIMIT 1000`, params);
+      if ((req.query.format || 'csv') === 'json') return res.json({ data: result.rows });
+      res.setHeader('Content-Type', 'text/csv'); res.setHeader('Content-Disposition', `attachment; filename="${tableName}.csv"`);
+      res.send(require('../domain/taskPolicy').toCsv(result.rows));
+    } catch (err) { res.status(500).json({ error: err.message }); }
+  });
+
   // GET /:id
   router.get('/:id', async (req, res) => {
     try {
